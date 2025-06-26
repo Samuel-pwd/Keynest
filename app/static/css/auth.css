@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url('../images/backgrounds/ocean1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+}
+
+.auth-container {
+  background: rgba(0, 0, 0, 0.35); /* Darker glass for better visibility */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
+  padding: 2.5rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+}
+
+
+.logo {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #00ffff;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 12px #00ffff;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.toggle-password:hover {
+  color: #00ffff;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #00ffff, #007bff);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px #00ffff;
+}
+
+.links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.links a {
+  color: #00e6e6;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  color: #ff6b6b;
+  margin-top: 5px;
+}
+
+/* Flash messages */
+ul.flash-messages {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.flash-message {
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.flash-message.success { background-color: rgba(22, 163, 74, 0.8); }
+.flash-message.info    { background-color: rgba(37, 99, 235, 0.8); }
+.flash-message.warning { background-color: rgba(234, 179, 8, 0.8); color: #000; }
+.flash-message.danger  { background-color: rgba(220, 38, 38, 0.8); }
+
+@media (max-width: 500px) {
+  .auth-container {
+    margin: 1.5rem;
+    padding: 2rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+}

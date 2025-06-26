@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('main.login') }}">
+  {{ form.hidden_tag() }}
+
+  <div class="form-group">
+    {{ form.identifier(class="form-input", placeholder="Username or Email") }}
+    {% for error in form.identifier.errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.password(class="form-input", placeholder="Password", id="password") }}
+    <span class="toggle-password" onclick="toggleVisibility('password', this)">👁️</span>
+    {% for error in form.password.errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="form-group checkbox-group">
+    {{ form.remember() }} Remember me
+  </div>
+
+  {{ form.submit(class="auth-btn") }}
+
+  <div class="links">
+    <p><a href="{{ url_for('main.forgot_password') }}">Forgot your password?</a></p>
+    <p>Don't have an account? <a href="{{ url_for('main.register') }}">Sign up</a></p>
+  </div>
+</form>
+{% endblock %}

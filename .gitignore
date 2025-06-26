@@ -1,0 +1,35 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# Secrets and sensitive files
+.env
+instance/
+
+# OS and IDE stuff
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# DB
+*.sqlite3
+*.db
+
+# Logs
+*.log
+*.bak
+
+# Others
+*.pyo
+*.egg-info/
+dist/
+build/
+htmlcov/
+.coverage
+coverage.xml
+.pytest_cache/
+migrations/__pycache__/

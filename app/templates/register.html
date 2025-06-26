@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('main.register') }}">
+  {{ form.hidden_tag() }}
+
+  <div class="form-group">
+    {{ form.username(class="form-input", placeholder="Username") }}
+    {% for error in form.username.errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.email(class="form-input", placeholder="Email") }}
+    {% for error in form.email.errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.password(class="form-input", placeholder="Password", id="password") }}
+    <span class="toggle-password" onclick="toggleVisibility('password', this)">👁️</span>
+    {% for error in form.password.errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="form-group">
+    {{ form.confirm_password(class="form-input", placeholder="Confirm Password", id="confirm_password") }}
+    <span class="toggle-password" onclick="toggleVisibility('confirm_password', this)">👁️</span>
+    {% for error in form.confirm_password.errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+  </div>
+
+  {{ form.submit(class="auth-btn") }}
+
+  <div class="links">
+    <p>Already have an account? <a href="{{ url_for('main.login') }}">Login</a></p>
+  </div>
+</form>
+{% endblock %}

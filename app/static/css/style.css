@@ -1,0 +1,47 @@
+/* Global styles for KeyNest */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f172a;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container for all page content */
+  .container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+  
+  /* Flash messages */
+  .flash-messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  
+  .flash-message {
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+  
+  /* Flash colors */
+  .flash-message.success { background-color: #16a34a; color: #fff; }
+  .flash-message.info    { background-color: #2563eb; color: #fff; }
+  .flash-message.warning { background-color: #eab308; color: #000; }
+  .flash-message.danger  { background-color: #dc2626; color: #fff; }
+  
+  /* Links */
+  a {
+    color: #38bdf8;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
