@@ -1,5 +1,3 @@
-# KeyNest/app/routes.py
-
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from app.forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
@@ -10,19 +8,19 @@ from sqlalchemy import or_
 
 main = Blueprint('main', __name__)
 
-# Home
+# Dashboard
 @main.route('/')
-@main.route('/home')
-def home():
+@main.route('/dashboard')
+def dashboard():
     if current_user.is_authenticated:
-        return render_template('home.html', title='Dashboard', user=current_user)
+        return render_template('dashboard.html', title='Dashboard', user=current_user)
     return redirect(url_for('main.login'))
 
 # Registration
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.dashboard'))
 
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -55,7 +53,7 @@ def register():
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.dashboard'))
 
     form = LoginForm()
     if form.validate_on_submit():
@@ -68,10 +66,10 @@ def login():
                 return render_template('login.html', form=form)
             login_user(user, remember=form.remember.data)
             flash('Logged in successfully!', 'success')
-            return redirect(request.args.get('next') or url_for('main.home'))
+            return redirect(request.args.get('next') or url_for('main.dashboard'))
         flash('Login failed. Check your username/email and password.', 'danger')
 
-    return render_template('login.html', form=form)
+
 
 # Logout
 @main.route('/logout')
@@ -79,7 +77,7 @@ def login():
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.dashboard'))
 
 # Forgot Password
 @main.route('/forget-password', methods=['GET', 'POST'])
@@ -105,13 +103,11 @@ def forgot_password():
         else:
             flash('No account found with that email.', 'danger')
 
-        # ✅ Stay on the same page instead of redirecting to token or login
         return redirect(url_for('main.forgot_password'))
 
     return render_template('forgot_password.html', form=form)
 
-
-# Reset Password via Token Route
+# Reset Password via Token
 @main.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
@@ -120,7 +116,6 @@ def reset_token(token):
     user = User.verify_reset_token(token)
     if user is None:
         return render_template('errors/expired_token.html'), 403
-        return redirect(url_for('main.forgot_password'))
 
     form = ResetPasswordForm()
     if form.validate_on_submit():
@@ -132,13 +127,11 @@ def reset_token(token):
 
     return render_template('reset_password.html', form=form)
 
-
-
 # Email Verification
 @main.route('/verify/<token>')
 def verify_email(token):
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.dashboard'))
 
     user = User.verify_verification_token(token)
     if user is None:
@@ -149,13 +142,12 @@ def verify_email(token):
         if not current_user.is_authenticated:
             login_user(user)
         flash('Your account is already verified. You are now logged in.', 'info')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.dashboard'))
 
     user.is_verified = True
     db.session.commit()
     flash('Your email has been successfully verified! Please log in to continue.', 'success')
     return redirect(url_for('main.login'))
-
 
 # Test Email
 @main.route('/send_test_mail')
@@ -169,4 +161,4 @@ def send_test_email():
     except Exception as e:
         current_app.logger.error(f"Failed to send email: {e}")
         flash(f'Failed to send test email. Check Flask-Mail configuration and app password.', 'danger')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.dashboard'))
