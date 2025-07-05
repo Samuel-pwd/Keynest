@@ -33,3 +33,6 @@ htmlcov/
 coverage.xml
 .pytest_cache/
 migrations/__pycache__/
+learning_notes/subsystems/encryption/key_management.md
+learning_notes/threat_analysis/pentest_log.md
+*.save

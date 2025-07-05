@@ -8,10 +8,10 @@ from sqlalchemy import or_
 
 main = Blueprint('main', __name__)
 
-# Dashboard
+# Home
 @main.route('/')
 @main.route('/dashboard')
-def dashboard():
+def home():
     if current_user.is_authenticated:
         return render_template('dashboard.html', title='Dashboard', user=current_user)
     return redirect(url_for('main.login'))
@@ -20,7 +20,7 @@ def dashboard():
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.home'))
 
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -53,12 +53,20 @@ def register():
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.home'))
 
     form = LoginForm()
     if form.validate_on_submit():
         identifier = form.identifier.data
         user = User.query.filter(or_(User.email == identifier, User.username == identifier)).first()
+
+        print("DEBUG LOGIN:")
+        print("Identifier:", identifier)
+        print("User exists:", bool(user))
+        if user:
+            print("User password hash:", user.password)
+            print("Is verified:", user.is_verified)
+            print("Password correct:", bcrypt.check_password_hash(user.password, form.password.data))
 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             if not user.is_verified:
@@ -66,10 +74,11 @@ def login():
                 return render_template('login.html', form=form)
             login_user(user, remember=form.remember.data)
             flash('Logged in successfully!', 'success')
-            return redirect(request.args.get('next') or url_for('main.dashboard'))
+            return redirect(request.args.get('next') or url_for('main.home'))
+
         flash('Login failed. Check your username/email and password.', 'danger')
 
-
+    return render_template('login.html', form=form)
 
 # Logout
 @main.route('/logout')
@@ -77,7 +86,7 @@ def login():
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('main.dashboard'))
+    return redirect(url_for('main.home'))
 
 # Forgot Password
 @main.route('/forget-password', methods=['GET', 'POST'])
@@ -107,7 +116,7 @@ def forgot_password():
 
     return render_template('forgot_password.html', form=form)
 
-# Reset Password via Token
+# Reset Password
 @main.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
@@ -131,7 +140,7 @@ def reset_token(token):
 @main.route('/verify/<token>')
 def verify_email(token):
     if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.home'))
 
     user = User.verify_verification_token(token)
     if user is None:
@@ -142,23 +151,24 @@ def verify_email(token):
         if not current_user.is_authenticated:
             login_user(user)
         flash('Your account is already verified. You are now logged in.', 'info')
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.home'))
 
     user.is_verified = True
     db.session.commit()
     flash('Your email has been successfully verified! Please log in to continue.', 'success')
     return redirect(url_for('main.login'))
 
-# Test Email
-@main.route('/send_test_mail')
+
+#Dashboard
+@main.route('/dashboard')
 @login_required
-def send_test_email():
-    try:
-        msg = Message('Test Email from KeyNest', recipients=[current_user.email])
-        msg.body = 'This is a test email sent from KeyNest application via SMTP.'
-        mail.send(msg)
-        flash('Test email sent successfully to your registered email!', 'success')
-    except Exception as e:
-        current_app.logger.error(f"Failed to send email: {e}")
-        flash(f'Failed to send test email. Check Flask-Mail configuration and app password.', 'danger')
-    return redirect(url_for('main.dashboard'))
+def dashboard():
+    return render_template('dashboard.html')
+
+
+# Debug route to list all users (DEV ONLY)
+@main.route('/debug-users')
+def debug_users():
+    users = User.query.all()
+    output = [f"{u.username} | {u.email} | Verified: {u.is_verified}" for u in users]
+    return "<br>".join(output)
