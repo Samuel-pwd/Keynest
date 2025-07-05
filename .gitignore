@@ -1,3 +1,4 @@
+
 # Byte-compiled / cache files
 __pycache__/
 *.py[cod]
@@ -35,4 +36,5 @@ coverage.xml
 migrations/__pycache__/
 learning_notes/subsystems/encryption/key_management.md
 learning_notes/threat_analysis/pentest_log.md
+*.save
 *.save
